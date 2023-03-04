@@ -1,7 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import permissions, status
-from .serializers import UserCreateSerializer, UserSerializer
+from rest_framework.generics import CreateAPIView
+from rest_framework import permissions, status,generics
+from .serializers import UserCreateSerializer, UserSerializer,QuestionSerializer,AnswerSerializer,CommentSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from .models import Question,Answer,Comment
+
 
 
 class RegisterView(APIView):
@@ -27,3 +31,71 @@ class RetrieveUserView(APIView):
     user = UserSerializer(user)
 
     return Response(user.data, status=status.HTTP_200_OK)
+
+class CreateQuestionAPIView(CreateAPIView):
+    serializer_class=QuestionSerializer
+
+    def create(self,request,*args,**kwargs):
+        serializer=self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers=self.get_success_headers(serializer.data)
+        return Response(serializer.data,status=status.HTTP_201_CREATED,headers=headers)
+
+class QuestionList(generics.ListCreateAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+
+class CreateAnswerAPIView(CreateAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)  # assuming the user is authenticated
+
+class CommentCreateView(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def post(self, request, answer_id, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer, answer_id)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer, answer_id):
+        answer = Answer.objects.get(id=answer_id)
+        serializer.save(author=self.request.user, answer=answer)
+
+
+class AnswerList(generics.ListCreateAPIView):
+   queryset=Answer.objects.all()
+   serializer_class=AnswerSerializer
+
+class AnswerDetail(generics.RetrieveUpdateDestroyAPIView):
+   queryset=Answer.objects.all()
+   serializer_class=AnswerSerializer
+
+## now we will be adding comment section to the answers list
+class CommentList(generics.ListCreateAPIView):
+   queryset=Comment.objects.all()
+   serializer_class=CommentSerializer
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+   queryset=Comment.objects.all()
+   serializer_class=CommentSerializer
