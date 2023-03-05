@@ -13,7 +13,7 @@ urlpatterns = [
     path('questions/create/',CreateQuestionAPIView.as_view(),name='create-question'),
     path('questions/', QuestionList.as_view(), name='question-list'),
     path('questions/<int:pk>/', QuestionDetail.as_view(), name='question-detail'),
-    path('questions/<int:question_id>/answers/',CreateAnswerAPIView.as_view()),
+    path('answers/create/',CreateAnswerAPIView.as_view()),
     path('answers/',AnswerList.as_view()),
     path('answers/<int:pk>/',AnswerDetail.as_view()),
     path('comments/',CommentList.as_view()),
