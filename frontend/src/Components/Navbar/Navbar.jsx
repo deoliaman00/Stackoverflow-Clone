@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 import stackoverflow from './stackoverflow.jpg'
 import './Navbar.css'
+import {  Link } from "react-router-dom";
 const Navigation = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -28,34 +29,30 @@ const Navigation = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto flex-fill">
-            <Nav.Link className="NavLinks" href="#home" >
+            <Link to="/" className="NavLinks">
               Home
-            </Nav.Link>
-            <Nav.Link className="NavLinks" href="#topics">
+            </Link>{" "}
+            <Link to="#" className="NavLinks">
               Topics
-            </Nav.Link>
-            <Nav.Link className="NavLinks" href="#products">
+            </Link>
+            <Link to="#" className="NavLinks">
               Products
-            </Nav.Link>
+            </Link>
           </Nav>
           {isLoggedIn ? (
             <Nav>
-              <Nav.Link
-                className="NavLinks"
-                href="#logout"
-                onClick={handleLogout}
-              >
+              <Link to="#" className="NavLinks" onClick={handleLogout}>
                 Logout
-              </Nav.Link>
+              </Link>
             </Nav>
           ) : (
             <Nav>
-              <Nav.Link className="NavLinks" href="#register">
+              <Link to="/register" className="NavLinks">
                 Register
-              </Nav.Link>
-              <Nav.Link className="NavLinks" href="#login">
+              </Link>
+              <Link to="/login" className="NavLinks">
                 Login
-              </Nav.Link>
+              </Link>
             </Nav>
           )}
         </Navbar.Collapse>

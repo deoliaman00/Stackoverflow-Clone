@@ -1,66 +1,59 @@
 import React from "react";
-import { Container, Row, Col, Card, Badge,Button } from "react-bootstrap";
-import { FaStackOverflow } from "react-icons/fa";
+import {useEffect,useState} from "react";
+import { Container, Row, Col, Card, Badge, Button } from "react-bootstrap";
+import LeftSideBar from "../LeftSideBar/LeftSideBar";
+import RightSideBar from "../RightSideBar/RightSideBar";
+import "./Home.css";
+import { Link } from "react-router-dom";
+import Axios from "axios";
 
 const HomePage = () => {
+  const [heading,setheading]=useState("");
+  useEffect(() => {
+    Axios.get("http://127.0.0.1:8000/api/questions/").then((res) => {
+      setheading(res.data[0].info);
+    });
+  }, []);
   return (
     <div>
       <Container fluid>
         <Row>
-          {/* This is the left bar implemented */}
-          <Col sm={2} className="bg-light mt-5">
-            <Card className="p-2 bg-warning mb-3">
-              <h5>Left Sidebar</h5>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-            </Card>
-            <Card className="p-2 bg-warning mb-3">
-              <h5>Left Sidebar 1</h5>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-            </Card>
-            <Card className="p-2 bg-warning mb-3">
-              <h5>Left Sidebar 2</h5>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-              <p>This is the left sidebar.</p>
-            </Card>
-          </Col>
+          <LeftSideBar />
           {/* This is the question list implemented */}
           <Col sm={8} className="mt-5">
             <Card className="p-3">
-              <h1>Welcome to my Stack Overflow clone</h1>
-              <p>
-                This is a simple implementation of the Stack Overflow UI using
-                React
-              </p>
+              <div className="container">
+                <h1 className="title">Questions </h1>
+                <Link to="/question">
+                  <button className="Questionbtn">Create Question</button>
+                </Link>
+              </div>
+              <p>{heading}</p>
               <Row>
                 <Col md={4} className="d-flex flex-row">
-                    <Card>
-                      <Card.Img variant="top" src="https://via.placeholder.com/150" />
-                      <Card.Body className="d-flex flex-column">
-                        <div className="d-flex flex-row justify-content-between align-items-center">
-                          <Card.Title>Topic 1</Card.Title>
-                          <div>
-                            <Badge variant="info" className="ml-2">
-                              10 questions
-                            </Badge>
-                            <Badge variant="warning" className="ml-2">
-                              15 answers
-                            </Badge>
-                          </div>
+                  <Card>
+                    <Card.Img
+                      variant="top"
+                      src="https://via.placeholder.com/150"
+                    />
+                    <Card.Body className="d-flex flex-column">
+                      <div className="d-flex flex-row justify-content-between align-items-center">
+                        <Card.Title>Topic 1</Card.Title>
+                        <div>
+                          <Badge variant="info" className="ml-2">
+                            10 questions
+                          </Badge>
+                          <Badge variant="warning" className="ml-2">
+                            15 answers
+                          </Badge>
                         </div>
-                        <Card.Text>A short description of the topic goes here.</Card.Text>
-                        <Button variant="primary">Go to Topic 1</Button>
-                      </Card.Body>
-                    </Card>
+                      </div>
+                      <Card.Text>
+                        A short description of the topic goes here.
+                      </Card.Text>
+                      <Button variant="primary">Go to Topic 1</Button>
+                    </Card.Body>
+                  </Card>
                 </Col>
                 <Col md={4}>
                   <Card>
@@ -297,25 +290,7 @@ const HomePage = () => {
             </Card>
           </Col>
           {/* Here we have implemented the right bar */}
-          <Col sm={2} className="bg-light mt-5">
-            <Card className="p-2 bg-warning mb-3">
-              <h5>Right Sidebar 2</h5>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-            </Card>
-            <Card className="p-2 bg-warning ">
-              <h5>Right Sidebar 3</h5>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-              <p>This is the right sidebar.</p>
-            </Card>
-          </Col>
+          <RightSideBar />
         </Row>
       </Container>
     </div>
