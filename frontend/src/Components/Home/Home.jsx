@@ -1,19 +1,28 @@
 import React from "react";
-import {useEffect,useState} from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Badge, Button } from "react-bootstrap";
 import LeftSideBar from "../LeftSideBar/LeftSideBar";
 import RightSideBar from "../RightSideBar/RightSideBar";
 import "./Home.css";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 
 const HomePage = () => {
-  const [heading,setheading]=useState("");
-  useEffect(() => {
-    Axios.get("http://127.0.0.1:8000/api/questions/").then((res) => {
-      setheading(res.data[0].info);
+  const [questions, setquestions] = useState([]);
+  useEffect(()=>{
+    axios.get('http://127.0.0.1:8000/api/questions/',{
+      headers:{
+        "Content-Type":"application/json",
+      },
+    }).then((response)=>{
+      setquestions(response.data);
+      console.log(questions);
+    }).catch((error)=>{
+      console.log(error);
     });
-  }, []);
+  },[]);
+
+  
   return (
     <div>
       <Container fluid>
@@ -25,267 +34,45 @@ const HomePage = () => {
               <div className="container">
                 <h1 className="title">Questions </h1>
                 <Link to="/question">
-                  <button className="Questionbtn">Create Question</button>
+                  <button className="Questionbtn" >
+                    Create Question
+                  </button>
                 </Link>
               </div>
-              <p>{heading}</p>
+              <p></p>
               <Row>
-                <Col md={4} className="d-flex flex-row">
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body className="d-flex flex-column">
-                      <div className="d-flex flex-row justify-content-between align-items-center">
-                        <Card.Title>Topic 1</Card.Title>
-                        <div>
-                          <Badge variant="info" className="ml-2">
-                            10 questions
-                          </Badge>
-                          <Badge variant="warning" className="ml-2">
-                            15 answers
-                          </Badge>
+                {questions.map((question) => (
+                  <Col md={12} className="d-flex flex-row" key={question.id}>
+                    <Card className="questioncard mb-3">
+                      <Card.Body className="d-flex flex-column">
+                        <div className="d-flex flex-row justify-content-between align-items-center">
+                          <Card.Title>{question.title}</Card.Title>
+                          <br />
+                          <div>
+                            <Badge variant="info" className="ml-2">
+                              {question.upvotes} upvotes
+                            </Badge>{" "}
+                            <Badge variant="info" className="ml-2">
+                              {question.downvotes} downvotes
+                            </Badge>{" "}
+                            <Badge variant="info" className="ml-2">
+                              {question.num_answers} answers
+                            </Badge>
+                          </div>
                         </div>
-                      </div>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 1</Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 2</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 2</Button>
-                      <Badge variant="info" className="ml-2">
-                        20 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        30 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 3</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 4</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 5</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 7</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 8</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 9</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 10</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 11</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 12</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
-                <Col md={4}>
-                  <Card>
-                    <Card.Img
-                      variant="top"
-                      src="https://via.placeholder.com/150"
-                    />
-                    <Card.Body>
-                      <Card.Title>Topic 13</Card.Title>
-                      <Card.Text>
-                        A short description of the topic goes here.
-                      </Card.Text>
-                      <Button variant="primary">Go to Topic 3</Button>
-                      <Badge variant="info" className="ml-2">
-                        5 questions
-                      </Badge>
-                      <Badge variant="warning" className="ml-2">
-                        10 answers
-                      </Badge>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                        <Card.Text>{question.body}</Card.Text>
+                        <span>
+                          <Link to={`/question/${question.id}`}>
+                            <Button className="mr-2" variant="success">View Question</Button>
+                          </Link>
+                          <Badge  className="tagsInfo">
+                            {question.tags}
+                          </Badge>
+                        </span>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
               </Row>
             </Card>
           </Col>

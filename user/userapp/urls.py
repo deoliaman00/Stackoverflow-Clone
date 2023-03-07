@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from .views import RegisterView, RetrieveUserView,CreateQuestionAPIView,QuestionDetail,QuestionList,AnswerList,AnswerDetail,CommentList,CommentDetail,CreateAnswerAPIView
+from .views import RegisterView, RetrieveUserView,CreateQuestionAPIView,QuestionDetail,QuestionList,AnswerList,AnswerDetail,CommentList,CommentDetail,CreateAnswerAPIView,LogoutView
 
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view()),
     path('token/verify/', TokenVerifyView.as_view()),
     path('register/', RegisterView.as_view()),
+    path('logout/',LogoutView.as_view()),
     path('user/', RetrieveUserView.as_view()),
     path('questions/create/',CreateQuestionAPIView.as_view(),name='create-question'),
     path('questions/', QuestionList.as_view(), name='question-list'),

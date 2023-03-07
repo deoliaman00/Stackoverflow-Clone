@@ -6,6 +6,7 @@ import Register from './Components/Register/Register.jsx'
 import Login from "./Components/Login/Login.jsx";
 import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Question from "./Components/Question/Question.jsx"
+import Logout from "./Components/Login/Logout"
 
 function App(){
   return (
@@ -17,6 +18,7 @@ function App(){
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
           <Route path="question" element={<Question/>} />
+          <Route path="logout" element={<Logout/>}/>
         </Routes>
       </Router>
     </>

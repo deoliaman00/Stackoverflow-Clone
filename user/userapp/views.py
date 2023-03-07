@@ -5,7 +5,7 @@ from rest_framework import permissions, status,generics
 from .serializers import UserCreateSerializer, UserSerializer,QuestionSerializer,AnswerSerializer,CommentSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Question,Answer,Comment
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterView(APIView):
@@ -23,6 +23,23 @@ class RegisterView(APIView):
     return Response(user.data, status=status.HTTP_201_CREATED)
 
 
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        try:
+            # delete the refresh token from the database
+            refresh_token = request.data.get('refresh_token')
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            # return a success response
+            return Response({'success': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            # return an error response
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+      
 class RetrieveUserView(APIView):
   permission_classes = [permissions.IsAuthenticated]
 

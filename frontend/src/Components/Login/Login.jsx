@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
-// import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-//   const history = useHistory();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -16,21 +15,42 @@ const Login = () => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // perform login logic here, e.g. call an API to verify credentials
-    if (email === "user@example.com" && password === "password") {
-      // successful login, redirect to home page
-    //   history.push("/");
-    } else {
-      // unsuccessful login, display error message
+  const submit = async (e) => {
+    e.preventDefault();
+    const user = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const { data } = await axios.post(
+        "http://127.0.0.1:8000/api/token/",
+        user,
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
+
+      // Initialize the access and refresh token in localStorage
+      localStorage.clear();
+      localStorage.setItem("access_token", data.access);
+      localStorage.setItem("refresh_token", data.refresh);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${data["access"]}`;
+
+      // Redirect to home page
+      window.location.href = "/";
+    } catch (error) {
+      // Display error message
       setErrorMessage("Invalid email or password.");
     }
   };
 
   return (
     <Container className="d-flex justify-content-center align-items-center container-size bg-light-blue mt-4">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={submit}>
         <h1 className="mb-4">Login</h1>
         {errorMessage && <p className="text-danger">{errorMessage}</p>}
         <Form.Group>
