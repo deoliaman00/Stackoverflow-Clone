@@ -32,6 +32,7 @@ class LogoutView(APIView):
             # delete the refresh token from the database
             refresh_token = request.data.get('refresh_token')
             token = RefreshToken(refresh_token)
+            print(refresh_token)
             token.blacklist()
             # return a success response
             return Response({'success': 'Successfully logged out.'}, status=status.HTTP_200_OK)

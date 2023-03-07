@@ -22,6 +22,14 @@ const HomePage = () => {
     });
   },[]);
 
+  function checkLogin() {
+    if (localStorage.getItem("access_token") === null) {
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/question";
+    }
+  }
+
   
   return (
     <div>
@@ -33,11 +41,9 @@ const HomePage = () => {
             <Card className="p-3">
               <div className="container">
                 <h1 className="title">Questions </h1>
-                <Link to="/question">
-                  <button className="Questionbtn" >
+                  <button className="Questionbtn" onClick={checkLogin}>
                     Create Question
                   </button>
-                </Link>
               </div>
               <p></p>
               <Row>
@@ -62,9 +68,8 @@ const HomePage = () => {
                         </div>
                         <Card.Text>{question.body}</Card.Text>
                         <span>
-                          <Link to={`/question/${question.id}`}>
-                            <Button className="mr-2" variant="success">View Question</Button>
-                          </Link>
+                            <Button className="mr-2" variant="success" onClick={checkLogin}>View Question</Button>
+
                           <Badge  className="tagsInfo">
                             {question.tags}
                           </Badge>
