@@ -61,6 +61,7 @@ class Question(models.Model):
         ('JS','JavaScript'),
         ('PHP','php'),
     ]
+    id=models.AutoField(primary_key=True)
     title = models.CharField(max_length=255,unique=True)
     body = models.TextField()
     # info=RichTextField()

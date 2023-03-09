@@ -1,0 +1,33 @@
+.QuestionDiv{
+    background-color: #FDD36A;
+}
+
+.ansDiv{
+    background-color: #E96479;
+}
+.allAnsDiv{
+    background-color: #635985;
+}
+
+.oneAns{
+    background-color: #7978FF;
+}
+label {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+input[type="textfield"] {
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+  font-size: 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="textfield"]:focus {
+  outline: none;
+  border-color: #0077ff;
+}

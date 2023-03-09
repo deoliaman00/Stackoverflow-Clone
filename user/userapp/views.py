@@ -3,11 +3,11 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework import permissions, status,generics
 from .serializers import UserCreateSerializer, UserSerializer,QuestionSerializer,AnswerSerializer,CommentSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from .models import Question,Answer,Comment
 from rest_framework_simplejwt.tokens import RefreshToken
-
-
+from django.contrib.auth import get_user_model
+user_account = get_user_model()
 class RegisterView(APIView):
   def post(self, request):
     data = request.data
@@ -72,10 +72,10 @@ class QuestionDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-
 class CreateAnswerAPIView(CreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -85,8 +85,8 @@ class CreateAnswerAPIView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)  # assuming the user is authenticated
-
+        serializer.save(author=self.request.user)
+    
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

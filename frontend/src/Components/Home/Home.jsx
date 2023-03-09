@@ -9,6 +9,7 @@ import axios from "axios";
 
 const HomePage = () => {
   const [questions, setquestions] = useState([]);
+  let count = 0;
   useEffect(()=>{
     axios.get('http://127.0.0.1:8000/api/questions/',{
       headers:{
@@ -28,6 +29,10 @@ const HomePage = () => {
     } else {
       window.location.href = "/question";
     }
+  }
+  function checkQuestion(event) {
+    console.log(event);
+    window.location.href = `question/${event}/`;
   }
 
   
@@ -56,7 +61,7 @@ const HomePage = () => {
                           <br />
                           <div>
                             <Badge variant="info" className="ml-2">
-                              {question.upvotes} upvotes
+                              {count} See here
                             </Badge>{" "}
                             <Badge variant="info" className="ml-2">
                               {question.downvotes} downvotes
@@ -68,8 +73,7 @@ const HomePage = () => {
                         </div>
                         <Card.Text>{question.body}</Card.Text>
                         <span>
-                            <Button className="mr-2" variant="success" onClick={checkLogin}>View Question</Button>
-
+                            <Button className="mr-2" variant="success" onClick={()=>checkQuestion(question.id)} >View Question</Button>
                           <Badge  className="tagsInfo">
                             {question.tags}
                           </Badge>

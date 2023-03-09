@@ -46,7 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['title', 'user','body','tags','upvotes','downvotes','num_answers','num_comments','created_at']
+        fields = ['id','title', 'user','body','tags','upvotes','downvotes','num_answers','num_comments','created_at']
     # info=RichTextField()
 
 #This will be the serializer that will take care of the Answer of the Question that was made
