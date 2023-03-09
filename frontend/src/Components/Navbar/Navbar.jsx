@@ -3,9 +3,12 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import stackoverflow from './stackoverflow.jpg'
 import './Navbar.css'
 import {  Link } from "react-router-dom";
+import axios from "axios"
+
+
 const Navigation = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [user,setUser]=useState("");
   const handleLogout = () => {
     setIsLoggedIn(false);
     // perform any additional logout logic here
@@ -14,9 +17,31 @@ const Navigation = () => {
   useEffect(() => {
     if(localStorage.getItem('access_token')!==null){
       setIsLoggedIn(true);
+      // getUserDetails();
     }
   }, [isLoggedIn])
   
+    const getUserDetails = async () => {
+    const token = localStorage.getItem("access_token");
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+    const options = {
+      withCredentials: true, // add withCredentials option if API requires authentication
+    };
+
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/user/", {
+        headers,
+        ...options,
+      });
+      console.log(response.data);
+      const name=response.data.first_name;
+      setUser(name);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Navbar
@@ -57,21 +82,31 @@ const Navigation = () => {
             <Link
               to="#"
               className="NavLinks btn "
+              onClick={getUserDetails}
               style={{ marginLeft: "10px", fontWeight: "bold" }}
             >
               Products
             </Link>
           </Nav>
           {isLoggedIn ? (
-            <Nav>
-              <button
-                className="btn"
-                style={{ fontWeight: "bold" }}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </Nav>
+            <>
+              <Nav>
+                <button
+                  className="btn"
+                  style={{ fontWeight: "bold" }}
+                >{user}
+                </button>
+              </Nav>
+              <Nav>
+                <button
+                  className="btn"
+                  style={{ fontWeight: "bold" }}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </Nav>
+            </>
           ) : (
             <Nav>
               <Link

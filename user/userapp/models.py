@@ -61,9 +61,9 @@ class Question(models.Model):
         ('JS','JavaScript'),
         ('PHP','php'),
     ]
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255,unique=True)
     body = models.TextField()
-    info=RichTextField()
+    # info=RichTextField()
     user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)

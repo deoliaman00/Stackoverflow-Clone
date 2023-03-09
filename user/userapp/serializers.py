@@ -40,15 +40,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
-    fields = ('first_name', 'last_name', 'email',)
+    fields = ('id','first_name', 'last_name', 'email',)
 
 # this is the serializer that is handling the post request of a question getting posted by the user     
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ['id', 'title', 'body','info', 'user', 'upvotes', 'downvotes', 
-                   'num_answers','num_comments','created_at', 'updated_at','tags']
-    info=RichTextField()
+        fields = ['title', 'user','body','tags','upvotes','downvotes','num_answers','num_comments','created_at']
+    # info=RichTextField()
 
 #This will be the serializer that will take care of the Answer of the Question that was made
 
