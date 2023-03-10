@@ -8,7 +8,7 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 import Question from "./Components/Question/Question.jsx"
 import Logout from "./Components/Login/Logout"
 import QuestionDetail from "./Components/QuestionDetail/QuestionDetail"
-
+import Profile from "./Components/Profile/Profile.jsx"
 
 function App(){
   return (
@@ -19,9 +19,10 @@ function App(){
           <Route path="/" element={<Home />} />
           <Route path="register" element={<Register />} />
           <Route path="login" element={<Login />} />
-          <Route path="question" element={<Question/>} />
-          <Route path="question/:id" element={<QuestionDetail/>} />
-          <Route path="logout" element={<Logout/>}/>
+          <Route path="question" element={<Question />} />
+          <Route path="question/:id" element={<QuestionDetail />} />
+          <Route path="logout" element={<Logout />} />
+          <Route path="profile/:id" element={<Profile />} />
         </Routes>
       </Router>
     </>

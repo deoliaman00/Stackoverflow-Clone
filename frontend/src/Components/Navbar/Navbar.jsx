@@ -4,20 +4,25 @@ import stackoverflow from './stackoverflow.jpg'
 import './Navbar.css'
 import {  Link } from "react-router-dom";
 import axios from "axios"
-
+import Profile from '../Profile/Profile'
 
 const Navigation = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user,setUser]=useState("");
+  const [userid,setUserid]=useState(null);
+
+  const openProfilepage=()=>{
+    window.location.href=`/profile/${userid}`;
+  }
   const handleLogout = () => {
     setIsLoggedIn(false);
     // perform any additional logout logic here
-     window.location.href = "/logout";
+     window.location.href = "/logout/";
   };
   useEffect(() => {
     if(localStorage.getItem('access_token')!==null){
       setIsLoggedIn(true);
-      // getUserDetails();
+      getUserDetails();
     }
   }, [isLoggedIn])
   
@@ -38,6 +43,8 @@ const Navigation = () => {
       console.log(response.data);
       const name=response.data.first_name;
       setUser(name);
+      setUserid(response.data.id);
+      console.log(`His id is ${userid}`);
     } catch (error) {
       console.error(error);
     }
@@ -92,9 +99,11 @@ const Navigation = () => {
             <>
               <Nav>
                 <button
+                  onClick={openProfilepage}
                   className="btn"
                   style={{ fontWeight: "bold" }}
-                >{user}
+                >
+                  {user}
                 </button>
               </Nav>
               <Nav>
