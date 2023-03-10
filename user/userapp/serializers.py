@@ -51,6 +51,70 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 #This will be the serializer that will take care of the Answer of the Question that was made
 
+class QuestionUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ('id', 'upvotes', 'downvotes')
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            user = request.user
+            if 'upvotes' in validated_data:
+                if user in instance.upvoted_by.all():
+                    instance.upvoted_by.remove(user)
+                    instance.upvotes -= 1
+                else:
+                    instance.upvoted_by.add(user)
+                    instance.upvotes += 1
+                    if user in instance.downvoted_by.all():
+                        instance.downvoted_by.remove(user)
+                        instance.downvotes -= 1
+            elif 'downvotes' in validated_data:
+                if user in instance.downvoted_by.all():
+                    instance.downvoted_by.remove(user)
+                    instance.downvotes -= 1
+                else:
+                    instance.downvoted_by.add(user)
+                    instance.downvotes += 1
+                    if user in instance.upvoted_by.all():
+                        instance.upvoted_by.remove(user)
+                        instance.upvotes -= 1
+        instance.save()
+        return instance
+
+class AnswerUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ('id', 'upvotes', 'downvotes')
+
+    def update(self, instance, validated_data):
+        request = self.context.get('request')
+        if request and hasattr(request, 'user'):
+            user = request.user
+            if 'upvotes' in validated_data:
+                if user in instance.upvotes_by.all():
+                    instance.upvotes_by.remove(user)
+                    instance.upvotes -= 1
+                else:
+                    instance.upvotes_by.add(user)
+                    instance.upvotes += 1
+                    if user in instance.downvotes_by.all():
+                        instance.downvotes_by.remove(user)
+                        instance.downvotes -= 1
+            elif 'downvotes' in validated_data:
+                if user in instance.downvotes_by.all():
+                    instance.downvotes_by.remove(user)
+                    instance.downvotes -= 1
+                else:
+                    instance.downvotes_by.add(user)
+                    instance.downvotes += 1
+                    if user in instance.upvotes_by.all():
+                        instance.upvotes_by.remove(user)
+                        instance.upvotes -= 1
+        instance.save()
+        return instance
+
 class CommentSerializer(serializers.ModelSerializer):
   author=serializers.ReadOnlyField(source='author.username')
   answer=serializers.PrimaryKeyRelatedField(queryset=Answer.objects.all())

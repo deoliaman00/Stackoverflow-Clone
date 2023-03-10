@@ -65,13 +65,15 @@ class Question(models.Model):
     title = models.CharField(max_length=255,unique=True)
     body = models.TextField()
     # info=RichTextField()
-    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserAccount, on_delete=models.CASCADE,related_name='questions')
     upvotes = models.PositiveIntegerField(default=0)
     downvotes = models.PositiveIntegerField(default=0)
     num_answers = models.PositiveIntegerField(default=0)
     num_comments = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    upvoted_by = models.ManyToManyField(UserAccount, blank=True,related_name='upvoted_questions')
+    downvoted_by = models.ManyToManyField(UserAccount, blank=True,related_name='downvoted_questions')
     tags = models.CharField(max_length=255, choices=GENRE_CHOICES)
     
     def __str__(self):
@@ -86,6 +88,11 @@ class Answer(models.Model):
    created_at=models.DateTimeField(auto_now_add=True)
    author=models.ForeignKey(UserAccount,on_delete=models.CASCADE)
    question=models.ForeignKey(Question,on_delete=models.CASCADE,related_name='answers')
+   upvotes = models.PositiveIntegerField(default=0)
+   downvotes = models.PositiveIntegerField(default=0)
+   upvotes_by = models.ManyToManyField(UserAccount, blank=True,related_name='upvoted_answers')
+   downvotes_by = models.ManyToManyField(UserAccount,blank=True,related_name='downvoted_answers')
+
 
    def __str__(self):
       return f"Answer by {self.author} on {self.question}"

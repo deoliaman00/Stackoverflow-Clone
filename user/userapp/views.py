@@ -2,11 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework import permissions, status,generics
-from .serializers import UserCreateSerializer, UserSerializer,QuestionSerializer,AnswerSerializer,CommentSerializer
+from .serializers import UserCreateSerializer, UserSerializer,QuestionSerializer,AnswerSerializer,CommentSerializer,QuestionUpdateSerializer,AnswerUpdateSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly,IsAuthenticated
 from .models import Question,Answer,Comment
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
+from rest_framework.authentication import TokenAuthentication
+# from rest_framework.permissions import IsAuthenticated
+
+
 user_account = get_user_model()
 class RegisterView(APIView):
   def post(self, request):
@@ -90,6 +94,8 @@ class CreateAnswerAPIView(CreateAPIView):
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, answer_id, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -119,3 +125,40 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
    queryset=Comment.objects.all()
    serializer_class=CommentSerializer
+
+
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+class QuestionUpdateAPIView(generics.UpdateAPIView):
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Question.objects.all()
+    serializer_class = QuestionUpdateSerializer
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        upvotes = request.data.get('upvotes', None)
+        downvotes = request.data.get('downvotes', None)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+
+class AnswerUpdateAPIView(generics.UpdateAPIView):
+    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Answer.objects.all()
+    serializer_class = AnswerUpdateSerializer
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        upvotes = request.data.get('upvotes', None)
+        downvotes = request.data.get('downvotes', None)
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)

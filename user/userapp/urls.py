@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from .views import RegisterView, RetrieveUserView,CreateQuestionAPIView,QuestionDetail,QuestionList,AnswerList,AnswerDetail,CommentList,CommentDetail,CreateAnswerAPIView,LogoutView
+from .views import RegisterView, RetrieveUserView,CreateQuestionAPIView,QuestionDetail,QuestionList,AnswerList,AnswerDetail,CommentList,CommentDetail,CreateAnswerAPIView,LogoutView,CommentCreateView,QuestionUpdateAPIView,AnswerUpdateAPIView
 
 
 urlpatterns = [
@@ -19,4 +19,7 @@ urlpatterns = [
     path('answers/<int:pk>/',AnswerDetail.as_view()),
     path('comments/',CommentList.as_view()),
     path('comments/<int:pk>/',CommentDetail.as_view()),
+    path('answers/<int:answer_id>/comments/',CommentCreateView.as_view()),
+    path('questions/<int:pk>/update/',QuestionUpdateAPIView.as_view()),
+    path('answers/<int:pk>/update/',AnswerUpdateAPIView.as_view()),
 ]
