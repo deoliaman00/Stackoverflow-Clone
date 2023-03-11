@@ -3,36 +3,36 @@ import {  Col, Card } from "react-bootstrap";
 
 const LeftSideBar = () => {
   return (
-    <Col sm={1} className="bg-light mt-5">
+    <Col sm={1} className="bg-light mt-3">
       <Card className="p-2 bg-warning mb-3">
         <h5>
           Hot Topics <hr />
         </h5>
         <p>NFT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
+        <p>QUANT</p>
+        <p>ML</p>
+        <p>AI</p>
+        <p>WEB 3</p>
       </Card>
       <Card className="p-2 bg-warning mb-3">
         <h5>
-          Hot Topics <hr />
+          Most Searched <hr />
         </h5>
-        <p>NFT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
+        <p>DRF</p>
+        <p>AWS</p>
+        <p>GIT</p>
+        <p>HFT</p>
+        <p>FAANG</p>
       </Card>
       <Card className="p-2 bg-warning mb-3">
         <h5>
-          Hot Topics <hr />
+          Coming Soon <hr />
         </h5>
-        <p>NFT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
-        <p>BOAT</p>
+        <p>AR</p>
+        <p>VR</p>
+        <p>3D-Printing</p>
+        <p>Genomics</p>
+        <p>AI-Images</p>
       </Card>
     </Col>
   );

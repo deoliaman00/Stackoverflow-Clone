@@ -6,7 +6,7 @@ import RightSideBar from "../RightSideBar/RightSideBar";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import "../Home/Home.css"
 const Profile = () => {
   const { id } = useParams();
   const [questions, setquestions] = useState([]);
@@ -30,7 +30,7 @@ const Profile = () => {
     console.log(event);
     window.location.href = `/question/${event}/`;
   }
-  const userQuestions = questions.filter((qustn) => qustn.id == id);
+  const userQuestions = questions.filter((qustn) => qustn.user == id);
   console.log("Printing all his questions");
   console.log(userQuestions);
   return (
@@ -39,48 +39,58 @@ const Profile = () => {
         <Row>
           <LeftSideBar />
           {/* This is the question list implemented */}
-          <Col sm={8} className="mt-5">
+          <Col sm={8} className="mt-3">
             <Card className="p-3">
               <div className="container">
                 <h1 className="title">Your Questions </h1>
               </div>
-              <p></p>
-              <Row>
-                {userQuestions.map((question) => (
-                  <Col md={12} className="d-flex flex-row" key={question.id}>
-                    <Card className="questioncard mb-3">
-                      <Card.Body className="d-flex flex-column">
-                        <div className="d-flex flex-row justify-content-between align-items-center">
-                          <Card.Title>{question.title}</Card.Title>
-                          <br />
-                          <div>
-                            <Badge variant="info" className="ml-2">
-                              {count} See here
-                            </Badge>{" "}
-                            <Badge variant="info" className="ml-2">
-                              {question.downvotes} downvotes
-                            </Badge>{" "}
-                            <Badge variant="info" className="ml-2">
-                              {question.num_answers} answers
-                            </Badge>
+              {userQuestions.length === 0 ? (
+                <Row>
+                  <div>
+                    Sorry But You have no Posts to Show, Please create a Post
+                  </div>
+                </Row>
+              ) : (
+                <Row>
+                  {userQuestions.map((question) => (
+                    <Col md={12} className="d-flex flex-row" key={question.id}>
+                      <Card className="questioncard mb-3">
+                        <Card.Body className="d-flex flex-column">
+                          <div className="d-flex flex-row justify-content-between align-items-center">
+                            <Card.Title>{question.title}</Card.Title>
+                            <br />
+                            <div>
+                              <Badge variant="info" className="ml-2">
+                                {count} See here
+                              </Badge>{" "}
+                              <Badge variant="info" className="ml-2">
+                                {question.downvotes} downvotes
+                              </Badge>{" "}
+                              <Badge variant="info" className="ml-2">
+                                {question.num_answers} answers
+                              </Badge>
+                            </div>
                           </div>
-                        </div>
-                        <Card.Text>{question.body}</Card.Text>
-                        <span>
-                          <Button
-                            className="mr-2"
-                            variant="success"
-                            onClick={() => checkQuestion(question.id)}
-                          >
-                            View Question
-                          </Button>
-                          <Badge className="tagsInfo">{question.tags}</Badge>
-                        </span>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
+                          <Card.Text>{question.body}</Card.Text>
+                          <span className="qustnInfo">
+                            <Button
+                              className="mr-2"
+                              variant="success"
+                              onClick={() => checkQuestion(question.id)}
+                            >
+                              View Question
+                            </Button>{" "}
+                            <Badge className="tagsInfo">{question.tags}</Badge>
+                            <Badge className="author">
+                              Author: {question.user}
+                            </Badge>
+                          </span>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
             </Card>
           </Col>
           {/* Here we have implemented the right bar */}

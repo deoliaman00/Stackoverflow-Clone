@@ -41,3 +41,16 @@ textarea[type="textfield"]:focus {
   border-radius: 5px; /* adjust the border radius as needed */
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); /* add a subtle drop shadow */
 }
+.commentDiv{
+  margin-left: 20px;
+}
+.contentArea{
+  height:50px;
+  width:80%;
+}
+
+.qustnTitlediv{
+  display: 'flex';
+  align-items: center;
+  justify-items: 'space-between';
+}

@@ -31,8 +31,11 @@ const HomePage = () => {
     }
   }
   function checkQuestion(event) {
-    console.log(event);
-    window.location.href = `question/${event}/`;
+    if (localStorage.getItem("access_token") === null) {
+      window.location.href = "/login";
+    } else {
+      window.location.href = `/question/${event}/`;
+    }
   }
 
   
@@ -42,7 +45,7 @@ const HomePage = () => {
         <Row>
           <LeftSideBar />
           {/* This is the question list implemented */}
-          <Col sm={8} className="mt-5">
+          <Col sm={8} className="mt-3">
             <Card className="p-3">
               <div className="container">
                 <h1 className="title">Questions </h1>
@@ -61,7 +64,7 @@ const HomePage = () => {
                           <br />
                           <div>
                             <Badge variant="info" className="ml-2">
-                              {count} See here
+                              {question.upvotes} upvotes
                             </Badge>{" "}
                             <Badge variant="info" className="ml-2">
                               {question.downvotes} downvotes
@@ -72,11 +75,12 @@ const HomePage = () => {
                           </div>
                         </div>
                         <Card.Text>{question.body}</Card.Text>
-                        <span>
-                            <Button className="mr-2" variant="success" onClick={()=>checkQuestion(question.id)} >View Question</Button>
-                          <Badge  className="tagsInfo">
+                        <span className="qustnInfo">
+                            <Button className="mr-2 view-question-btn" variant="success" onClick={()=>checkQuestion(question.id)} >View Question</Button>
+                          {" "}<Badge  className="tagsInfo">
                             {question.tags}
                           </Badge>
+                          <Badge className="author">Author: {question.user}</Badge>
                         </span>
                       </Card.Body>
                     </Card>

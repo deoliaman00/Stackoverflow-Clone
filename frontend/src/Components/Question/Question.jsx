@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import LeftSideBar from "../LeftSideBar/LeftSideBar";
 import RightSideBar from "../RightSideBar/RightSideBar";
 import axios from "axios";
-
+import "./Question.css"
 const Question = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -70,40 +70,48 @@ const Question = () => {
           {/* This is the question list implemented */}
           <Col sm={8} className="mt-5">
             <h1>Create a Question</h1>
-            <form onSubmit={handleSubmit}>
-              <label>
-                Title:
-                <input type="text" value={title} onChange={handleTitleChange} />
-              </label>
-              <br />
-              <label>
-                Body:
-                <input
-                  type="textfield"
-                  value={body}
-                  onChange={handleBodyChange}
-                />
-              </label>
-              <label>
-                Tags:
-                <select
-                  name="tags"
-                  value={tags}
-                  onChange={handleTagsChange}
-                >
-                  <option value="">-- Select a tag --</option>
-                  <option value="NS">NODEJS</option>
-                  <option value="DJ">Django</option>
-                  <option value="FB">Facebook</option>
-                  <option value="HU">Heroku</option>
-                  <option value="IS">ISRO</option>
-                  <option value="JS">JavaScript</option>
-                  <option value="PHP">PHP</option>
-                </select>
-              </label>
-              <br />
-              <button type="submit">Submit</button>
-            </form>
+            <div className="formDiv">
+              <form onSubmit={handleSubmit}>
+                <div class="form-group">
+                  <label for="exampleFormControlInput1">Title :</label>
+                  <input
+                    type="text"
+                    class="form-control input-sm"
+                    value={title}
+                    onChange={handleTitleChange}
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlTextarea1">Body :</label>
+                  <textarea
+                    class="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="3"
+                    type="textfield"
+                    value={body}
+                    onChange={handleBodyChange}
+                  ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="exampleFormControlSelect1">Tags :</label>
+                  <select name="tags" value={tags} onChange={handleTagsChange}>
+                    <option value="">-- Select a tag --</option>
+                    <option value="NS">NODEJS</option>
+                    <option value="DJ">Django</option>
+                    <option value="FB">Facebook</option>
+                    <option value="HU">Heroku</option>
+                    <option value="IS">ISRO</option>
+                    <option value="JS">JavaScript</option>
+                    <option value="PHP">PHP</option>
+                  </select>
+                </div>
+                <div className="mt-5">
+                  <button class="btn btn-success btn-lg" type="submit">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
           </Col>
           {/* Here we have implemented the right bar */}
           <RightSideBar />

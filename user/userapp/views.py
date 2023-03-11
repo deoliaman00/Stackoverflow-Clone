@@ -9,7 +9,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
 # from rest_framework.permissions import IsAuthenticated
-
+from django.db.models import F
 
 user_account = get_user_model()
 class RegisterView(APIView):
@@ -67,7 +67,7 @@ class CreateQuestionAPIView(CreateAPIView):
         return Response(serializer.data,status=status.HTTP_201_CREATED,headers=headers)
 
 class QuestionList(generics.ListCreateAPIView):
-    queryset = Question.objects.all()
+    queryset = Question.objects.all().order_by(F('created_at').desc(nulls_last=True))
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 

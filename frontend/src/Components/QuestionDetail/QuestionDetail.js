@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col,Badge} from "react-bootstrap";
 import LeftSideBar from "../LeftSideBar/LeftSideBar";
 import RightSideBar from "../RightSideBar/RightSideBar";
 import "./QuestionDetail.css";
@@ -231,6 +231,7 @@ const QuestionDetail = () => {
         },
       })
       .then((response) => {
+        console.log("Here are the questions: ");
         console.log(response.data);
         setquestions(response.data);
         getUserDetails();
@@ -251,23 +252,39 @@ const QuestionDetail = () => {
         <Row>
           <LeftSideBar />
           {/* This is the question list implemented */}
-          <Col sm={8} className="mt-5">
+          <Col sm={8} className="mt-3">
             <div className="card mb-3 QuestionDiv">
               <div className="card-header">Question</div>
               <div className="card-body">
-                <h5 className="card-title">{questions.title}</h5>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <h5 style={{ margin: 0 }} className="card-title">
+                    {questions.title}
+                  </h5>
+                  <div>
+                  <a className="btn btn-primary ml-2">
+                    {questions.upvotes} upvotes
+                  </a>{" "}
+                  <a className="btn btn-dark">
+                    {questions.downvotes} downvotes
+                  </a>{" "}
+                  </div>
+                </div>
                 <p className="card-text">{questions.body}</p>
-                <a href="#" className="btn btn-primary m-lg-2">
-                  {questions.tags}
-                </a>
-                <a href="#" className="btn btn-primary ml-2">
-                  {questions.upvotes} upvotes
-                </a>{" "}
-                <a href="#" className="btn btn-primary">
-                  {questions.downvotes} downvotes
-                </a>{" "}
-                <button onClick={upVoteQuestion}>Upvote</button>{" "}
-                <button onClick={downVoteQuestion}>Downvote</button>{" "}
+                <a className="btn btn-primary m-lg-2">{questions.tags}</a>
+                <button className="btn btn-success" onClick={upVoteQuestion}>
+                  Upvote
+                </button>{" "}
+                <button className="btn btn-light" onClick={downVoteQuestion}>
+                  Downvote
+                </button>{" "}
+                <Badge className="author">Author: {questions.user}</Badge>{" "}
+                <Badge>Created At: {questions.created_at} </Badge>
               </div>
             </div>
 
@@ -302,21 +319,28 @@ const QuestionDetail = () => {
                     <a href="#" className="btn btn-primary m-lg-2">
                       0 Upvotes
                     </a>
-                    <a href="#" className="btn btn-primary ml-2">
+                    <a href="#" className="btn btn-dark ml-2">
                       0 Downvotes
                     </a>{" "}
-                    <button onClick={(event) => upVoteAnswer(ans.id, event)}>
+                    <button
+                      className="btn btn-success"
+                      onClick={(event) => upVoteAnswer(ans.id, event)}
+                    >
                       Upvote
                     </button>{" "}
-                    <button onClick={(event) => downVoteAnswer(ans.id, event)}>
+                    <button
+                      className="btn btn-light"
+                      onClick={(event) => downVoteAnswer(ans.id, event)}
+                    >
                       Downvote
                     </button>
+                    <Badge>Author: {ans.author}</Badge>
                   </div>
                   {/* Handling the comment section here */}
-                  <div>
+                  <div className="commentDiv">
                     <h5>Comment Section</h5>
                     <button
-                      className="comment-btn"
+                      className="btn btn-dark"
                       onClick={() => handleCommentButtonClick(ans.id)}
                     >
                       Comment Here:{" "}
@@ -328,12 +352,18 @@ const QuestionDetail = () => {
                       >
                         <label>Comment :</label>
                         <textarea
+                          className="contentArea"
                           cols="30"
                           rows="10"
                           value={commentb}
                           onChange={onCommentChange}
                         ></textarea>
-                        <button type="submit" onClick={createComment}>
+                        <button
+                          style={{ marginLeft: "20px" }}
+                          className="btn btn-info mb-5"
+                          type="submit"
+                          onClick={createComment}
+                        >
                           Submit
                         </button>
                       </form>
