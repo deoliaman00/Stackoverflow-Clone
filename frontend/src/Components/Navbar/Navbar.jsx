@@ -25,7 +25,10 @@ const Navigation = () => {
       getUserDetails();
     }
   }, [isLoggedIn])
-  
+
+    const callAlert = ()=>{
+      alert("Sorry we are still working on this feature!");
+    }
     const getUserDetails = async () => {
     const token = localStorage.getItem("access_token");
     const headers = {
@@ -62,7 +65,7 @@ const Navigation = () => {
       }}
     >
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand href="/">
           <img src={stackoverflow} alt="" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -83,6 +86,7 @@ const Navigation = () => {
               to="#"
               className="NavLinks btn "
               style={{ marginRight: "60px", fontWeight: "bold" }}
+              onClick={callAlert}
             >
               Topics
             </Link>
@@ -91,6 +95,7 @@ const Navigation = () => {
               className="NavLinks btn "
               onClick={getUserDetails}
               style={{ marginLeft: "10px", fontWeight: "bold" }}
+              onClick={callAlert}
             >
               Products
             </Link>

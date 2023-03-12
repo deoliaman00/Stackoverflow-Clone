@@ -15,7 +15,6 @@ import "./QuestionDetail.css";
 
 const QuestionDetail = () => {
   const { id } = useParams();
-  const [showComments, setShowComments] = useState(false);
   const [questions, setquestions] = useState([]);
   const [user, setUser] = useState("");
   const [body, setbody] = useState("");
@@ -24,6 +23,8 @@ const QuestionDetail = () => {
   const [commentb,setCommentb]=useState("");
   const [answer_id,setAnswer_id]=useState(null);
   const [commentAns,setcommentAns]=useState([]);
+  const [commentansId,setcommentansId]=useState(null);
+
 
   const upVoteAnswer=(id,event)=>{
     event.preventDefault();
@@ -238,11 +239,13 @@ const QuestionDetail = () => {
        },
      })
      .then((response) => {
-       console.log("Here are the comments: ");
-       console.log(response.data);
+      //  console.log("Here are the comments: ");
+      //  console.log(response.data);
       setcommentAns(response.data);
-       setShowComments(true);
+       console.log("Just Show me some comments :- ");
+       setcommentansId(id);
        console.log(commentAns);
+      console.log(`Show me this answer ${commentAns[0].answer}`);
      })
      .catch((error) => {
        console.log(error);
@@ -257,8 +260,8 @@ const QuestionDetail = () => {
         },
       })
       .then((response) => {
-        console.log("Here are the questions: ");
-        console.log(response.data);
+        // console.log("Here are the questions: ");
+        // console.log(response.data);
         setquestions(response.data);
         getUserDetails();
         answerslist();
@@ -346,7 +349,7 @@ const QuestionDetail = () => {
                       {ans.upvotes} upvotes
                     </a>
                     <a href="#" className="btn btn-dark ml-2">
-                      {ans.downvotes}
+                      {ans.downvotes} downvotes
                     </a>{" "}
                     <button
                       className="btn btn-success"
@@ -359,19 +362,22 @@ const QuestionDetail = () => {
                       onClick={(event) => downVoteAnswer(ans.id, event)}
                     >
                       Downvote
-                    </button>
-                    <Badge>Author: {ans.author}</Badge>{" "}
-                    <button onClick={() => gettingComment(ans.id)}>
+                    </button>{" "}
+                    {/* <Badge>Author: {ans.author}</Badge>{" "} */}
+                    <button className="btn btn-secondary" onClick={() => gettingComment(ans.id)}>
                       Show Comments:
                     </button>
-                    {showComments && (
+                    {commentansId==ans.id && (
                       <Card>
                         <ListGroup variant="flush">
-                          {commentAns.map((comment) => (
-                            <ListGroup.Item key={comment.id}>
+                          { commentAns.length ===0 ?(
+                            <div>No comments found.</div>
+                          ):(
+                          commentAns.map((comment) => (
+                            <ListGroup.Item>
                               {comment.body}
                             </ListGroup.Item>
-                          ))}
+                          )))}
                         </ListGroup>
                       </Card>
                     )}

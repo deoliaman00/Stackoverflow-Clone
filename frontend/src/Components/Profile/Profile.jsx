@@ -61,7 +61,7 @@ const Profile = () => {
                             <br />
                             <div>
                               <Badge variant="info" className="ml-2">
-                                {count} See here
+                                {question.upvotes} upvotes
                               </Badge>{" "}
                               <Badge variant="info" className="ml-2">
                                 {question.downvotes} downvotes
@@ -83,7 +83,8 @@ const Profile = () => {
                             <Badge className="tagsInfo">{question.tags}</Badge>
                             <Badge className="author">
                               Author: {question.user}
-                            </Badge>
+                            </Badge>{" "}
+                            <Badge>Created At: {question.created_at} </Badge>
                           </span>
                         </Card.Body>
                       </Card>
