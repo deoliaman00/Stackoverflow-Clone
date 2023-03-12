@@ -89,8 +89,11 @@ class CreateAnswerAPIView(CreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
+        question=serializer.validated_data['question']
         serializer.save(author=self.request.user)
-    
+        question.num_answers=Answer.objects.filter(question=question).count()
+        question.save()
+            
 class CommentCreateView(generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
@@ -126,6 +129,13 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
    queryset=Comment.objects.all()
    serializer_class=CommentSerializer
 
+class CommentListView(generics.ListAPIView):
+   serializer_class=CommentSerializer
+   def get_queryset(self):
+      answer=self.kwargs.get('answer')
+      queryset=Comment.objects.filter(answer=answer)
+      return queryset
+   
 
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated

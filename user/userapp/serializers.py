@@ -123,6 +123,7 @@ class CommentSerializer(serializers.ModelSerializer):
     model=Comment
     fields=['id','body','created_at','author','answer']
 
+
 class AnswerSerializer(serializers.ModelSerializer):
   comment=CommentSerializer(many=True,read_only=True)
   author=serializers.ReadOnlyField(source='author.username')
@@ -130,4 +131,4 @@ class AnswerSerializer(serializers.ModelSerializer):
 
   class Meta:
     model=Answer
-    fields=['id','body','created_at','author','question','comment']
+    fields=['id','body','created_at','question','comment','upvotes','downvotes','created_at','author']

@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Row, Col,Badge} from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Badge,
+  Card,
+  ListGroup,
+} from "react-bootstrap";
 import LeftSideBar from "../LeftSideBar/LeftSideBar";
 import RightSideBar from "../RightSideBar/RightSideBar";
 import "./QuestionDetail.css";
 
 const QuestionDetail = () => {
   const { id } = useParams();
+  const [showComments, setShowComments] = useState(false);
   const [questions, setquestions] = useState([]);
   const [user, setUser] = useState("");
   const [body, setbody] = useState("");
@@ -15,6 +23,7 @@ const QuestionDetail = () => {
   const [visible, setVisible] = useState(false);
   const [commentb,setCommentb]=useState("");
   const [answer_id,setAnswer_id]=useState(null);
+  const [commentAns,setcommentAns]=useState([]);
 
   const upVoteAnswer=(id,event)=>{
     event.preventDefault();
@@ -221,7 +230,24 @@ const QuestionDetail = () => {
         console.log("Error posting data to API:", error);
       });
   };
-
+ const gettingComment = (id) => {
+   axios
+     .get(`http://127.0.0.1:8000/api/answers/${id}/comment/`, {
+       headers: {
+         "Content-Type": "application/json",
+       },
+     })
+     .then((response) => {
+       console.log("Here are the comments: ");
+       console.log(response.data);
+      setcommentAns(response.data);
+       setShowComments(true);
+       console.log(commentAns);
+     })
+     .catch((error) => {
+       console.log(error);
+     });
+ };
   // Gets all the Data required to be rendered here in this page
   useEffect(() => {
     axios
@@ -267,12 +293,12 @@ const QuestionDetail = () => {
                     {questions.title}
                   </h5>
                   <div>
-                  <a className="btn btn-primary ml-2">
-                    {questions.upvotes} upvotes
-                  </a>{" "}
-                  <a className="btn btn-dark">
-                    {questions.downvotes} downvotes
-                  </a>{" "}
+                    <a className="btn btn-primary ml-2">
+                      {questions.upvotes} upvotes
+                    </a>{" "}
+                    <a className="btn btn-dark">
+                      {questions.downvotes} downvotes
+                    </a>{" "}
                   </div>
                 </div>
                 <p className="card-text">{questions.body}</p>
@@ -317,10 +343,10 @@ const QuestionDetail = () => {
                   <div className="card-body ">
                     <p className="card-text">{ans.body}</p>
                     <a href="#" className="btn btn-primary m-lg-2">
-                      0 Upvotes
+                      {ans.upvotes} upvotes
                     </a>
                     <a href="#" className="btn btn-dark ml-2">
-                      0 Downvotes
+                      {ans.downvotes}
                     </a>{" "}
                     <button
                       className="btn btn-success"
@@ -334,7 +360,21 @@ const QuestionDetail = () => {
                     >
                       Downvote
                     </button>
-                    <Badge>Author: {ans.author}</Badge>
+                    <Badge>Author: {ans.author}</Badge>{" "}
+                    <button onClick={() => gettingComment(ans.id)}>
+                      Show Comments:
+                    </button>
+                    {showComments && (
+                      <Card>
+                        <ListGroup variant="flush">
+                          {commentAns.map((comment) => (
+                            <ListGroup.Item key={comment.id}>
+                              {comment.body}
+                            </ListGroup.Item>
+                          ))}
+                        </ListGroup>
+                      </Card>
+                    )}
                   </div>
                   {/* Handling the comment section here */}
                   <div className="commentDiv">
